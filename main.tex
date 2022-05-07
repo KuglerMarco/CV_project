@@ -80,7 +80,7 @@ Furthermore, \ref{fig:objects_expl} (d) and (e) give the height and width of all
     \label{fig:objects_expl}
 \end{figure}
 
-Finally, we investigated some border cases in the dataset to complement the mean observations. Figure \ref{fig:extreme_train} shows the image from the original training set with the maximum (a) and minimum (b) number of annotated objects, the object with the maximum (c) and minimum (d) bounding box ratio and maximum (e) and minimum (f) bounding box size, and the images with the maximum number of cars (g) and persons (h), which are the two most prevalent object categories (see Figure \ref{fig:occurrence}). Figure \ref{fig:extreme_val} presents the same cases for the validation set. Interestingly, the maximum number of objects in an image in the original training set (subplot \ref{fig:extreme_train} (a)) is lower than our expectations, at a total of 22. Contrary to that, the validation set contains an image with 54 annotated objects, all of which are persons. Based on the training data, which only has an image with a maximum number of 9 persons, we expect this to be a challenging validation scenario for the model. Another notable case is subplot \ref{fig:extreme_val} (b), which shows the minimum number of annotated objects in the validation set, which is 4. However, there are a number of unannotated scooters in the middle of the image. The same is true for image \ref{fig:extreme_val} (c) as well as image \ref{fig:extreme_train} (b). Such missing annotations are fatal for the performance in the model if they occur in the training set \cite{xu2019missing} and entail an incorrect accuracy if they appear in the validation set. We have found further images with unannotated objects, among them bikes, busses, and cars, in the original training set, which we show in our video delivered alongside this report (slides {\color{red}{a-b}}). We will follow up on these observations in the following qualitative analysis of the data exploration.
+Finally, we investigated some border cases in the dataset to complement the mean observations. Figure \ref{fig:extreme_train} shows the image from the original training set with the maximum (a) and minimum (b) number of annotated objects, the object with the maximum (c) and minimum (d) bounding box ratio and maximum (e) and minimum (f) bounding box size, and the images with the maximum number of cars (g) and persons (h), which are the two most prevalent object categories (see Figure \ref{fig:occurrence}). Figure \ref{fig:extreme_val} presents the same cases for the validation set. Interestingly, the maximum number of objects in an image in the original training set (subplot \ref{fig:extreme_train} (a)) is lower than our expectations, at a total of 22. Contrary to that, the validation set contains an image with 54 annotated objects, all of which are persons. Based on the training data, which only has an image with a maximum number of 9 persons, we expect this to be a challenging validation scenario for the model. Another notable case is subplot \ref{fig:extreme_val} (b), which shows the minimum number of annotated objects in the validation set, which is 4. However, there are a number of unannotated scooters in the middle of the image. The same is true for image \ref{fig:extreme_val} (c) as well as image \ref{fig:extreme_train} (b). Such missing annotations are fatal for the performance in the model if they occur in the training set \cite{xu2019missing} and entail an incorrect accuracy if they appear in the validation set. We have found further images with unannotated objects, among them bikes, busses, and cars, in the original training set. We will follow up on these observations in the following qualitative analysis of the data exploration.
 
 \newpage
 \begin{figure}[h!]
@@ -131,11 +131,11 @@ Finally, we investigated some border cases in the dataset to complement the mean
 
 \subsubsection*{Qualitative analysis}
 
-Going more into depth into the content of the dataset, we oriented to the proposed approach in \cite{Karpathy2019} with the aim of estimating predictions and errors of the model and their reasons. A first questions to be evaluated on the basis of the explored data is whether local or global features are more significant to the outcome of the model performance. In our case, local features in the form of different vehicles and persons in traffic are the most important, while global features such as the brightness, weather or number of vehicles in traffic are of lesser importance. However, of the traffic participants, their global features should be learned by the model in order to classify the desired objects correctly, rather than differentiating within a class based on local features such as the colour of a person's jacket. Additionally, the global context of the objects needs to be correctly recognised by the model, such as the differentiation between a person riding a vehicle, thereby becoming a rider, and a pedestrian. This is a distinction we recognise as challenging, and expect the model to make mistakes in this regard.
+Going more into depth into the content of the dataset, we oriented to the proposed approach in \cite{Karpathy2019} with the aim of estimating predictions and errors of the model and their reasons. A first questions to be evaluated on the basis of the explored data is whether local or global features are more significant to the outcome of the model performance. In our case, local features in the form of different vehicles and persons in traffic are the most important, while global features such as the brightness, weather or number of vehicles in traffic are of lesser importance. However, of the traffic participants, their global features should be learned by the model in order to classify the desired objects correctly, rather than differentiating within a class based on local features such as the colour of a person's jacket. Additionally, the global context of the objects needs to be correctly recognised by the model, such as the differentiation between a person riding a vehicle, thereby becoming a rider, and a pedestrian.
 
-The variation in the images is generally speaking low. The weather conditions in all captured images are consistent, where there is no precipitation, but snow on the side of the road in the majority of images. The winter conditions also entail that all pedestrians wear similar, winter-appropriate clothing, and that there are no convertibles and no motorcycles (see also Figure \ref{fig:occurrence}). In addition, all data is captured in a tightly limited local area of only a few kilometers within the same city. The volume of traffic is consistently low compared to other areas in the world, for example highways in the US or India.
+The variation in the images is generally speaking low. The weather conditions in all captured images are consistent, where there is no precipitation, but snow on the side of the road in the majority of images. The winter conditions also entail that all pedestrians wear similar, winter-appropriate clothing, and that there are no convertibles and no motorcycles (see also Figure \ref{fig:occurrence}). In addition, all data is captured in a tightly limited local area of only a few kilometers within the same city. The volume of traffic is consistently low compared to other areas in the world.
 
-The consistency of the labels in both the training and validation set is critically compromised however. As detailed above and in the video delivered alongside this report, a significant number of labels is either missing or incorrect. In addition to the problems already discussed above, this also leads to further inconsistencies such as the number of riders compared to the number of vehicles that can transport riders. Therefore, further preprocessing in the form of quality-checking the annotations would be appropriate and expected to improve the model performance across different approaches.
+The consistency of the labels in both the training and validation set is critically compromised however. As detailed above and in the video delivered alongside this report, a significant number of labels is either missing or incorrect. This leads to further inconsistencies such as the number of riders compared to the number of vehicles that can transport riders. Therefore, further preprocessing in the form of quality-checking the annotations would be appropriate and expected to improve the model performance across different approaches.
 
 The level of detail in terms of resolution in the evaluated dataset is low. On the one hand, this enables somewhat reasonably efficient training, as the size of the data is limited. On the other hand, the objects to be classified are in many cases hard to detect and correctly bound even for humans, as we experienced during the annotation task of this project at first hand. Therefore, further downsampling of the images is not an option.
 
@@ -197,7 +197,7 @@ As a last point of observation, we conclude that the spatial position of objects
 \end{table}
 For this task, we followed all changes given in the task description. The resulting architecture of our baseline model is summarized in Table \ref{tab:baseline}. As recommended, the second max-pool layer of the orginal SSD architecture of assignment 4  was removed and the kernel size of the last two convolutions was set to 2. The baseline model can be found in the configuration file \texttt{configs/tdt4265\_task2-1.py}. It has a total number of 2,750,240 parameters.
 
-The best\footnote{In all quantitative analyses, we give the best mAP@0.5:0.95 that we recorded during the number of epochs trained, which is not always obtained in the last epoch. We implemented this by always saving the current best model.} mAP@0.5:0.95 for the baseline model is 0.037 after 30 epochs, 0.046 after 50 epochs, and 0.054 after 125 epochs. The inference speed is 14.32 frames per second with a total runtime of approximately 6.98 seconds. Plots of the total loss, classification loss, regression loss and mAP can be found in Figure \ref{fig:loss-2-1}. Additionally, we decided to show the AP plots for object classes car and person, which are the two prevalent classes. It can be clearly observed that the AP for cars improves faster and more steadily than for persons, giving a first indication that the classification of the latter is a harder problem for the model. Additionally, we can observe that the AP for class car improves very similarly with the mAP. Knowing that car is the prevalent class in the training set, we can therefore conclude that the training in the baseline model is dominated by this class, and does not perform as well on the less prevalent classes. This can again be seen when observing the AP for the class person in Figure \ref{fig:loss-2-1} (f).
+The best\footnote{In all quantitative analyses, we give the best mAP@0.5:0.95 that we recorded during the number of epochs trained, which is not always obtained in the last epoch. We implemented this by always saving the current best model.} mAP@0.5:0.95 for the baseline model is 0.037 after 30 epochs, 0.046 after 50 epochs, and 0.054 after 125 epochs. The inference speed is 14.32 frames per second with a total runtime of approximately 6.98 seconds. Plots of the total loss, classification loss, regression loss and mAP can be found in Figure \ref{fig:loss-2-1}. Additionally, we show the AP plots for object classes car and person, which are the two prevalent classes. It can be clearly observed that the AP for cars improves faster and more steadily than for persons, giving a first indication that the classification of the latter is a harder problem for the model. Additionally, we can observe that the AP for class car improves very similarly with the mAP. Knowing that car is the prevalent class in the training set, we can therefore conclude that the training in the baseline model is dominated by this class, and does not perform as well on the remaining classes. This can again be seen when observing the AP for the class person in Figure \ref{fig:loss-2-1} (f).
 
 \begin{figure}[t!]
     \centering
@@ -285,39 +285,15 @@ Coming from the Task 2.1 baseline mode, we replaced the first four layers of the
 
 Replacing the backbone of the baseline model with a FPN yielded a best mAP@0.5:0.95 after 100 epochs of 0.056. Details can be found in the config file \texttt{configs/tdt4265\_task2-3\_fpn}.  The implementation of the FPN can be found in the file \texttt{modeling/backbones/resnet34\_fpn.py}.  A plot of losses is given in Figure \ref{fig:loss-2-3}, where the FPN model is shown in dark blue. The model has a total number of 35,382,204 parameters and an inference speed of approximately 8.34 frames per seconds, with a total runtime of 11.10 seconds, which is faster than the Task 2.1 baseline model.
 
-Applying the Resnet34 with a FPN on top only helps in detecting more medium sized objects. The detection of both large and small objects is not improved. This is a surprising result, since the objective of the FPN is mainly to provide semantically rich feature maps for smaller object sizes. Nevertheless, the mAP@0.5:0.95 increases by 0.2\% with 20 epochs less training time.
-
-\textcolor{red}{Write about that FPN is supposed to help with the detection of smaller objects. mAP large decreases, mAP medium improves significantly, mAP small does not improve (yet).}
-
-\textcolor{red}{To Do: Find out what small, medium, large means}
+Applying the Resnet34 with a FPN on top only helps in detecting more medium sized objects (see Figure \ref{fig:loss-2-3} (h)). The detection of both large and small objects is not improved (\ref{fig:loss-2-3} (g) and (i), respectively). This is a surprising result, since the objective of the FPN is mainly to provide semantically rich feature maps for smaller object sizes. Nevertheless, the mAP@0.5:0.95 increases by 0.2\% with 25 epochs less training time compared to the baseline model in Task 2.1.
 
 \subsubsection*{Focal Loss}
-As described in the task, we replaced the loss function with Focal loss \cite{lin2017focal} with the recommendations made in the task description. This includes implementing Focal loss on top of the softmax cross-entropy loss, for which we added one-hot encoding of the given target labels. Details can be found in the file \texttt{ssd/modeling/focal\_loss.py}. For this task, we chose $\gamma = 2$ as recommended in \cite{lin2017focal} and set $\alpha = 0.1$ for the background class as indicated in the task. 
+As described in the task, we replaced the loss function with Focal loss \cite{lin2017focal} with the recommendations made in the task description. This includes implementing Focal loss on top of the softmax cross-entropy loss, for which we applied one-hot encoding of the given target labels. Details can be found in the file \texttt{ssd/modeling/focal\_loss.py}. For this task, we chose $\gamma = 2$ as recommended in \cite{lin2017focal} and set $\alpha = 0.01$ for the background class as indicated in the task. 
 
 By these changes, the performance of best mAP@0.5:0.95 at 0.056 after 100 epochs is maintained in comparison to the FPN without Focal loss. The config file is \texttt{configs/tdt4265\_task2-3\_focal}. A plot of losses is given in Figure \ref{fig:loss-2-3}, where the model with Focal loss is shown in light blue. The inference speed and the total number of parameters remain the same as in the previous step.
 
-\textcolor{red}{Talk about effect of Focal loss, expected/unexpected outcomes and reasons for them}
+Focal loss adds a factor to the cross entropy loss function, which reduces the loss especially for well-classified examples, but also suppresses the loss function overall \cite{lin2017focal}. This property can be observed in the classification loss: Focal loss seems to decrease the classification loss compared to the previous model. As seen in Figure \ref{fig:loss-2-3}, the classification loss approaches 0 much faster than the previous models. Another reason for the low classification loss might also be the low alpha value for the background class, which could lead to lower classification loss than with the previous hard negative mining in the previous loss function. 
 
-
-\subsubsection*{Deeper Classification and Regression Output Heads}
- We implemented deeper regression and classification heads following the architecture used in \cite{lin2017focal}. Details can be found in the file \texttt{ssd/modeling/RetinaDeep.py}. In our implementation, all feature map extractions share the same parameters, and in both heads, we used four convolutional layers with channel size 256, kernel size 3, stride 1 and padding 1 followed by ReLU activation each. The last layer of the classification head is now a convolutional layer with channel size n\_boxes $\times$ num\_classes, and the last layer of the regression head is a convolutional layer with channel size n\_boxes $\times$ 4.
- 
-Replacing the single-layer regression and classification output heads with deeper convolutional nets comes with an observable improvement in performance, with the best mAP@0.5:0.95 with in 100 epochs being 0.070. The config file is \texttt{configs/tdt4265\_task2-3\_heads}. The model has a total number of 39,203,894 parameters and an inference speed of 3.03 frames per second, for a total of 33.03 seconds. A plot of losses is given in Figure \ref{fig:loss-2-3}, where the model with deeper classification output heads is shown in orange.
-
-\textcolor{red}{To Do: Argue about reason for performance improvement, better recognition for smaller objects, etc.}
-
-\subsubsection*{Initialisation of Bias}
-
-Technical changes:
-\begin{itemize}
-    \item initializing the weights and the bias as recommended in the paper \cite{lin2017focal}
-    \item all bias parameter in both the regression and the classification head initialized to 0 despite the bias for the background class of the last layer of the classification head, which corresponds to the recommendation in the task
-    \item all weights in both the regression and the classification head initialized to a gaussian distribution with mean of 0 and standard deviation of 0.1
-\end{itemize}
-
-\textcolor{red}{(Change this intro) Finally, initializing bias of last convolutional layer to the values described in the task description} gives a best mAP@0.5:0.95 of 0.069  after training for \textcolor{red}{100?} epochs. The config file is \texttt{configs/tdt4265\_task2-3\_init} \textcolor{red}{ + Refer to where in the code each component is implemented}. A plot of losses is given in Figure \ref{fig:loss-2-3}, where the model with improved initialization of the bias is shown in red.
-
-\textcolor{red}{number of parameters, inference speed}
 
 \begin{figure}[t!]
     \centering
@@ -326,60 +302,199 @@ Technical changes:
     \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/loss_regression_loss3.svg}}
     \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_mAP3.svg}}
     \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_mAP@0.5_3.svg}}
-    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-3/legend-2-3.png}}
     \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_mAP_small3.svg}}
     \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_mAP_medium3.svg}}
     \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_mAP_large3.svg}}
-    \caption{(a) Total loss (b) classification loss (c) regression loss (d) mAP (e) mAP@0.5 (f) legend (g) mAP for small objects (h) mAP for medium objects (i) mAP for large objects for the iterations in Task 2.3 trained for 100 epochs. The baseline system of Task 2.1 is represented by the orange plot, which can be differentiated from the plot for the adapted regression heads as it was trained for a longer number of 125 epochs (and performs consistently worse).}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_AP_car3.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_AP_person3.svg}}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-3/legend-2-3.png}}
+    \caption{(a) Total loss (b) classification loss (c) regression loss (d) mAP (e) mAP@0.5 (f) mAP for small objects (g) mAP for medium objects (h) mAP for large objects (i) AP for object class car (j) AP for object class person (k) legend for the iterations in Task 2.3 trained for 100 epochs. The baseline system of Task 2.1 is represented by the orange plot, which can be differentiated from the plot for the adapted classification and regression heads as it was trained for a longer number of 125 epochs (and performs consistently worse).}
     \label{fig:loss-2-3}
 \end{figure}
 
+\subsubsection*{Deeper Classification and Regression Output Heads}
+ We implemented deeper regression and classification heads following the architecture used in \cite{lin2017focal}. Details can be found in the file \texttt{ssd/modeling/RetinaDeep.py}. In our implementation, all feature map extractions share the same parameters, and in both heads, we used four convolutional layers with channel size 256, kernel size 3, stride 1 and padding 1 followed by ReLU activation each. The last layer of the classification head is now a convolutional layer with channel size n\_boxes $\times$ num\_classes, and the last layer of the regression head is a convolutional layer with channel size n\_boxes $\times$ 4.
+ 
+Replacing the single-layer regression and classification output heads with deeper convolutional nets comes with an observable improvement in performance, with the best mAP@0.5:0.95 with in 100 epochs being 0.070. The config file is \texttt{configs/tdt4265\_task2-3\_heads}. The model has a total number of 39,203,894 parameters and an inference speed of 3.03 frames per second, for a total of 33.03 seconds. A plot of losses is given in Figure \ref{fig:loss-2-3}, where the model with deeper classification output heads is shown in orange.
+
+Deeper classification and regression heads provide the ability to learn more complex patterns from the extracted feature maps in order to recognise objects and adapt the anchor boxes to the object. This property can be easily observed in the Figure \ref{fig:loss-2-3}, which clearly shows the large improvements in terms of mAP@0.5:0.95 in each object sizes and overall. On the other side, the larger amount of parameters in the classification and regression heads also introduce a higher loss as can be seen in the loss functions (see Figure \ref{fig:loss-2-3} (a) - (c)).
+
+\subsubsection*{Initialisation of Bias}
+
+As a last step in Task 2.3, the initialisation was be implemented, which follows the recommendations in the paper \cite{lin2017focal}. More precisely, we initialized all bias parameter in both the regression and the classification head to 0 but the bias for the background class of the last layer of the classification head, which corresponds to the recommendation in the task. All weights in both the regression and the classification head were initialized to a Gaussian distribution with mean of 0 and standard deviation of 0.1. The initialization should prevent the model from experiencing a high loss value from the large amount of background anchors. We did not observe any high values in the first iterations after introducing focal loss and contrarily saw a low loss value after a few iterations. Thus, we do not see any improvements with the initialization as implemented in the paper. Nevertheless, we observed that the loss function decreases with the initialization, which is the expected behaviour. The model with the initialization even results in a slightly worse mAP@0.5:0.95 of 0.069 after training for 100 epochs.
+
+Further details of our implementation can be found in the file \texttt{ssd/modeling/retina\_deep\_init.py} and the config file \texttt{configs/tdt4265\_task2-3\_init.py}. A plot of losses is given in Figure \ref{fig:loss-2-3}, where the model with improved initialisation of the bias is shown in red.
+
+
 \subsubsection*{Adding Data Augmentation Back In}
 
-\begin{figure}[]
+Initially, we trained the models in Task 2.3 without any augmentations to yield a better comparison between the introduced features and to save time during data loading. After implementing all required features from Task 2.3, we reintroduced several data augmentations we had previously evaluated on the Task 2.1 model in order to prevent the model from the apparent overfitting. More precisely, we applied the augmentations random crop, random horizontal flip, random translation and random Gaussian blur to the Task 2.3 model, as those were the ones with the best performance improvements on the Task 2.1 baseline model. Figure \ref{fig:data_augment_comparison} shows the effect of the described data augmentation on (a) the Task 2.1 baseline model in comparison to (b) the Task 2.3 model in terms of mAP. While its benefits were not yet visible in the Task 2.1 model, enlarging the training set by augmentations evidently helps to prevent the Task 2.3 model from overfitting.
+
+\begin{figure}[b!]
     \centering
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-2/final/metrics_mAP7.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-3/metrics_mAP_with_augmentations.svg}}
-    \caption{\textcolor{red}{Add caption.}}
+    \subfigure[]{\includesvg[width=0.4\textwidth]{Task2-2/final/metrics_mAP7.svg}}
+    \subfigure[]{\includesvg[width=0.4\textwidth]{Task2-3/metrics_mAP_with_augmentations.svg}}
+    \caption{(a) Task 2.1 baseline model with (blue) and without (orange) data augmentation (b) Task 2.3 model with (pink) and without (red) data augmentation as detailed in Task 2.2.}
     \label{fig:data_augment_comparison}
 \end{figure}
 
-\textbf{\textcolor{red}{Analysis/discussion/comparison}}
-
-\textcolor{red}{Final plot of inference speed as comparison? Same for number of parameters?}
 
 \newpage
 \subsection*{Task 2.4: Using the Exploration Knowledge}
-\begin{itemize}
-    \item Comprehensive technical description of the modifications introduced to the model in this task: short description of changes and reference to code/config files
-    \item Quantitative analysis (?)
-\end{itemize}
+
+\subsubsection*{Alpha}
+In order to counter the harsh imbalance in the data set as seen in the data exploration, we followed the approach to modify the alpha values in the focal loss function according to the prevalence of the classes in the training data set. For this, we assigned specific values for $\alpha$ detailed in Table \ref{tab:alpha}.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{c|c|c}
+    Object class & Label ratio (training) & assigned $\alpha$\\
+    \hline
+    car & 52.3\% & 1\\
+    person & 26.8\% & 1.95\\
+    rider & 8.7\% & 6.00 \\
+    bicycle & 5.7\% & 9.10 \\
+    scooter & 3.4\% & 15.4 \\
+    bus & 2.4\% & 21.80 \\
+    truck & 0.7\% & 75.00 \\
+    motorcycle & 0.0\% & 0 \\
+    \end{tabular}
+    \caption{New values for $\alpha$ derived from the data exploration analysis.}
+    \label{tab:alpha}
+\end{table}
+
+In this way, we expected a more balanced result for the different classes, since mistakes in regressing and classifying less frequently represented examples lead to a higher loss than the more prevalent examples, like the cars. Thus, there's a higher incentive for the model to focus on the rare objects.
+
+As we can see in \ref{fig:loss-2-4-mAP}, the overall mAP improves significantly. Furthermore, one can see an increase in the detection of smaller objects, which might be the result of focusing on smaller objects than the most prevalent class car.
+
+\subsubsection*{Gamma}
+
+Focal loss has another parameter to adapt to the dataset: $\gamma$. Since the model focuses on the classes, which are easy to classify, predominantly the car, we expected that increasing the $\gamma$ should result in a more balanced result, since the incentive for the model increases to avoid classification and regression mistakes in classes harder to classify, e.g. a person (which is in a lot of cases hard to recognize even for a human being).
+
+As we can see in \ref{fig:loss-2-4-mAP}, the overall mAP increases slightly. In \ref{fig:loss-2-4-sml}, one can see that the model better classifies small objects, since smaller objects are generally harder to detect than larger.
+
+\subsubsection*{Anchors}
+
+The size and the ratio of the anchors of a object detection model should be as close to the data set as possible, in order to make regression and classification efficient for the model.
+
+First, we decided to cluster the sizes of the along the size of the objects in order to determine groups of ground truth boxes which are in similar size. These clusters of boxes are then again clustered along the with and height in order to determine the boxes in the data set, which are in similar ratio. In each size group of the boxes three different ratios are determined.
+
+For the clustering we used the k-means implementation of the scikit package \cite{scikit-learn}.
+
+\begin{figure}[h!]
+    \centering
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-4/Anchors/cluster.png}}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-4/Anchors/cluster_0.png}}
+    \vspace{-0.15cm}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-4/Anchors/cluster_1.png}}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-4/Anchors/cluster_2.png}}
+    \vspace{-0.15cm}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-4/Anchors/cluster_3.png}}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-4/Anchors/cluster_4.png}}
+    \vspace{-0.15cm}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{Task2-4/Anchors/cluster_5.png}}
+    \vspace{-0.15cm}
+    \caption{\textcolor{red}{(a)  Clustering the sizes of the boxes in the validation set (b-f) clustering the ratios of the groups of boxes.}}
+    \label{fig:clustering}
+\end{figure}
+
+As we can see in \ref{fig:loss-2-4-mAP}, we can see a small decrease in the mAP, but looking at \ref{fig:loss-2-4-sml} we see that there is a significant increase in the mAP for the small object sizes, since the anchor boxes are optimized. The small decrease of the overall mAP can be traced back to the general difficulty of classifying smaller objects, since there are less features prevalent.
+
+\subsubsection*{Feature Map}
+
+Until now, the model scales down the actual image to a feature map of [32, 128] in the first feature map extraction, by a factor of 4. We considered, that this might be a too large factor for the smaller objects in the image to be recognized by the anchor boxes. Therefore, we tried out to change the size of the first feature map in order to see the difference. Yet, we were aware that introducing a bigger feature map introduces an extreme inference overhead, which might yield a worse performance.
+
+\subsubsection*{Regression and Classification Heads}
+
+Until now, the model uses one head for all the feature maps regarding classification and regression. In the data exploration step we discovered, that there are classes which are predominantly emerging in smaller sizes, e.g. a person. Cars on the other hand are double the size on average. Thus, we considered to split the regression and the classification head into two, so that the model can learn the smaller objects independently from the larger objects. In order to be able to train within the memory limit of our resources, we reduced the depth of the heads each.
+
+As seen in \ref{fig:loss-2-4-mAP}, the overall mAP stays almost the same. Yet, looking at \ref{fig:loss-2-4-sml}, we see that small objects are better detected by the model. The detection of the medium sized objects is worse. This could be traced back to the fact that the medium sized objects are split along the two heads, which are then overall trained worse each.
+
+
+\subsubsection*{Final}
+We concluded that the following adaptions are worth following: Alpha, Gamma, Anchors, Heads.
+
+As a final step, we also introduced the Adam optimizer \cite{kingma2014adam}. Adam uses the Adaptive Gradient Algorithm, which applies different learning rates for different parameters. In this way, the optimizer makes it possible to learn sparse features more efficiently. As seen in Task 1.1, the images in the dataset consist of a low resolution and predominantly smaller objects. Thus, the Adam optimizer introduces a good mechanism to make the model learn these sparse features more efficiently.
+
+Furthermore, we applied the augmentations from Task 2.2.
+
+In Figure \ref{fig:loss-2-4}, one can clearly see the significant improvement in overall mAP, as well as in the detection for each object size compared to the model from Task 2.2. The mAP@0.5:0.95 increases to 0.092 overall. The amount of parameters is 39590904. The runtime analysis results in 22.77s total runtime and 4.39 FPS.
+
+\begin{figure}[t!]
+    \centering
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Alpha/metrics_mAP9.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Anchors/metrics_mAP11.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Gamma/metrics_mAP12.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Heads/metrics_mAP13.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Feature-Map/metrics_mAP14.svg}} 
+    \caption{mAP for (a) Alpha (b) Anchors (c) Gamma (d) Heads (e) Feature Map, where the Task 2.3 model is shown in red.}
+    \label{fig:loss-2-4-mAP}
+\end{figure}
+
+\newpage
+\begin{figure}[h!]
+    \centering
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Alpha/metrics_mAP_small9.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Alpha/metrics_mAP_medium9.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Alpha/metrics_mAP_large9.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Anchors/metrics_mAP_small11.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Anchors/metrics_mAP_medium11.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Anchors/metrics_mAP_large11.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Gamma/metrics_mAP_small12.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Gamma/metrics_mAP_medium12.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Gamma/metrics_mAP_large12.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Heads/metrics_mAP_small13.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Heads/metrics_mAP_medium13.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Heads/metrics_mAP_large13.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Feature-Map/metrics_mAP_small14.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Feature-Map/metrics_mAP_medium14.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Feature-Map/metrics_mAP_large14.svg}}
+    \caption{(a) mAP for small objects Alpha (b) mAP for medium objects Alpha (c) mAP for largest objects Alpha (d) mAP for small objects Anchors (e) mAP for medium objects Anchors (f) mAP for largest objects Anchors (g) mAP for small objects Gamma (h) mAP for medium objects Gamma (i) mAP for largest objects Gamma (j) mAP for small objects Heads (k) mAP for medium objects Heads (l) mAP for largest objects Heads (m) mAP for small objects Feature Map (n) mAP for medium objects Feature Map (o) mAP for large objects Feature Map, where the Task 2.3 model is shown in red.}
+    \label{fig:loss-2-4-sml}
+\end{figure}
+\newpage
+
+\newpage
+\begin{figure}[t!]
+    \centering
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/loss_total_loss10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/loss_classification_loss10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/loss_regression_loss10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/metrics_mAP10_10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/metrics_mAP_small10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/metrics_mAP_medium10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/metrics_mAP_large10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/metrics_AP_car(1)10.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Final/metrics_AP_person10.svg}}
+    \caption{(a) Total loss (b) classification loss (c) regression loss (d) mAP (e) mAP for small objects (f) mAP for medium objects (g) mAP for large objects (h) AP for object class car (i) AP for object class person for Task 2.4 model using the exploration knowledge.}
+    \label{fig:loss-2-4}
+\end{figure}
+\newpage
 
 \subsection*{Task 2.5: Extending the Dataset}
-Adapted focal loss $\alpha$ to distribution in extended training set as described for the original training set in Task 2.4? Same for anchor boxes?
+
+For training the extended data set we used the best model yet, which is the model developed in Task 2.4.
+
 
 \begin{itemize}
-    \item Quantitative analysis on larger dataset
+    \item Quantitative analysis on larger dataset \textcolor{red}{Plots}
     \item Figure \ref{fig:loss-2-5}
     \item analyze the importance of a larger dataset
 \end{itemize}
 
 \begin{figure}[t!]
     \centering
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/loss_total_loss5.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/loss_total_loss6.svg}}
     \vspace{-0.15cm}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/loss_classification_loss5.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/loss_regression_loss5.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/metrics_mAP5.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/metrics_AP_car5.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/metrics_AP_person5.svg}}
-    \vspace{-0.4cm}
-    \caption{(a) Total loss (b) classification loss (c) regression loss (d) mAP (e) AP for class car (f) AP for class person for the Task 2.5 model trained on the original training set (orange) and the extended training set (grey) trained for 125 epochs.}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/loss_classification_loss6.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/loss_regression_loss6.svg}}
+    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-5/metrics_mAP6.svg}}
+    \caption{(a) Total loss (b) classification loss (c) regression loss (d) mAP@0.5:0.95 (e) mAP}
     \label{fig:loss-2-5}
 \end{figure}
 
 
-
+\newpage
 \section*{Task 3}
 
 \subsection*{Task 3.1}
@@ -388,6 +503,12 @@ Delivered in Task 2 and 4.
 \subsection*{Task 3.2}
 Select three 3 of the most influential modeling decisions throughout the project and present a qualitative analysis. The qualitative analysis should highlight key aspects of your model and should be supported by qualitative
 examples.
+
+Three most influential modeling decisions throughout the project:
+\begin{enumerate}
+    \item Deeper regression and classification heads - mAP@0.5:0.95 improved by \textcolor{red}{x} \%
+    \item Feature maps
+\end{enumerate}
 
 Example questions that your analysis and discussion can answer are:
 \begin{itemize}
@@ -421,14 +542,47 @@ What are the weaknesses of the approach selected in the project if you were to d
 
 \section*{Task 4}
 
-As we are a group of two students, we chose two subtasks from Task 4: Task 4.1 and 4.2.
+\subsection*{Task 4.1: Implementing BiFPN}
 
-\subsection*{Task 4.1: Implementation BiFPN}
-Choose two out of the four tasks
+For the implementation of BiFPN, we used the available implementation of \cite{efficientdet}. The model corresponds to the model developed in Task 2.3 with small adaptions. For example, the last two feature extractors are replaced by only one convolutional layer each (kernel size 3, stride 2, padding 1). Furthermore we adapted the existing implementation of the BiFPN to process 4 layers instead of 3 layers from the feature extractor in order to get 6 feature maps from the backbone. We used the Bi-FPN implementation with 64 channels and 3 blocks.
+
+While the overall mAP increases slightly, the major improvement is visible in the mAP of small objects. With Bi-FPN, the mAP for small objects more than doubles.
+
+
+
 
 \subsection*{Task 4.2: Explaining the Model with CAM}
-Class activation maps
 
+For the CAM we used the grad\_cam package as recommended by the task \cite{gradcam}. We had to introduce following adaptations to get it run within our implementation. At first, we had to implement a custom reshape function, which reshapes the activation to a specific target size. Second, the implementation in the package expects a dictionary as results from the model, which is contrary to the current implementation, where we return a tuple for the results. Thus, we wrapped the model in a custom wrapper, which returns the results in a dictionary instead of a tuple. It can be found in \texttt{ssd/modeling/retina\_wrap.py}. Furthermore, we decided to use the available script from the repository to implement the CAM visualisation and compare it to the actual image. We used \texttt{performance\_assessment/save\_comparison\_images.py}. The implementation can be found in \texttt{performance\_assessment/class\_activation.py}. The script automatically loads random images from the data set and applies the cam activation, which is then saved to \texttt{performance\_assessment/CAM/}. The resolution of the class activation can be adapted by setting the target size. We experienced the best results with the resolution of [2,16]. A larger target size yields more precise activation.
+
+
+\begin{figure}[h!]
+    \centering
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/2_16.png}}
+    \vspace{-0.2cm}
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/2_16(2).png}}
+    \vspace{-0.2cm}
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/4_32.png}}
+    \vspace{-0.2cm}
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/4_32(2).png}}
+    \vspace{-0.15cm}
+    \caption{\textcolor{red}{Caption} (a) (b) (c) (d)}
+    \label{fig:CAM1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/8_64.png}}
+    \vspace{-0.15cm}
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/8_64(2).png}}
+    \vspace{-0.15cm}
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/32_256.png}}
+    \vspace{-0.1cm}
+    \subfigure[]{\includegraphics[width=0.8\textwidth]{Task4-CAM/32_256(2).png}}
+    \vspace{-0.15cm}
+    \caption{\textcolor{red}{Caption} (a) (b) (c) (d)}
+    \label{fig:CAM2}
+\end{figure}
 
 \bibliographystyle{alpha}
 \bibliography{sample}
