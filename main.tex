@@ -431,28 +431,6 @@ In Figure \ref{fig:loss-2-4}, one can clearly see the significant improvement in
     \label{fig:loss-2-4-mAP}
 \end{figure}
 
-\newpage
-\begin{figure}[h!]
-    \centering
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Alpha/metrics_mAP_small9.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Alpha/metrics_mAP_medium9.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Alpha/metrics_mAP_large9.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Anchors/metrics_mAP_small11.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Anchors/metrics_mAP_medium11.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Anchors/metrics_mAP_large11.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Gamma/metrics_mAP_small12.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Gamma/metrics_mAP_medium12.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Gamma/metrics_mAP_large12.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Heads/metrics_mAP_small13.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Heads/metrics_mAP_medium13.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Heads/metrics_mAP_large13.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Feature-Map/metrics_mAP_small14.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Feature-Map/metrics_mAP_medium14.svg}}
-    \subfigure[]{\includesvg[width=0.32\textwidth]{Task2-4/Feature-Map/metrics_mAP_large14.svg}}
-    \caption{(a) mAP for small objects Alpha (b) mAP for medium objects Alpha (c) mAP for largest objects Alpha (d) mAP for small objects Anchors (e) mAP for medium objects Anchors (f) mAP for largest objects Anchors (g) mAP for small objects Gamma (h) mAP for medium objects Gamma (i) mAP for largest objects Gamma (j) mAP for small objects Heads (k) mAP for medium objects Heads (l) mAP for largest objects Heads (m) mAP for small objects Feature Map (n) mAP for medium objects Feature Map (o) mAP for large objects Feature Map, where the Task 2.3 model is shown in red.}
-    \label{fig:loss-2-4-sml}
-\end{figure}
-\newpage
 
 \newpage
 \begin{figure}[t!]
@@ -473,14 +451,9 @@ In Figure \ref{fig:loss-2-4}, one can clearly see the significant improvement in
 
 \subsection*{Task 2.5: Extending the Dataset}
 
-For training the extended data set we used the best model yet, which is the model developed in Task 2.4.
+For training the extended data set we used the best model yet, which is the final model developed in Task 2.4. The mAP@0.5:0.95 increases to 0.195. Runtime analysis yields a total runtime of 22.73s and 4.4 FPS. The total parameter stays the same.
 
-
-\begin{itemize}
-    \item Quantitative analysis on larger dataset \textcolor{red}{Plots}
-    \item Figure \ref{fig:loss-2-5}
-    \item analyze the importance of a larger dataset
-\end{itemize}
+The importance of a larger dataset can be directly seen by the severe improvements in mAP. The difference in mAP between the same model trained with a small dataset and the large dataset is 10\% and thus more than twice as precise (in terms of the mAP metric). This can be traced back to the fact, that a larger dataset provides a wider representation of the domain.
 
 \begin{figure}[t!]
     \centering
@@ -504,41 +477,66 @@ Delivered in Task 2 and 4.
 Select three 3 of the most influential modeling decisions throughout the project and present a qualitative analysis. The qualitative analysis should highlight key aspects of your model and should be supported by qualitative
 examples.
 
-Three most influential modeling decisions throughout the project:
-\begin{enumerate}
-    \item Deeper regression and classification heads - mAP@0.5:0.95 improved by \textcolor{red}{x} \%
-    \item Feature maps
-\end{enumerate}
+\subsubsection*{Feature Pyramid Network}
+Applying the pretrained Resnet34 model with a FPN on top is one of the decisive modelling decisions.
 
-Example questions that your analysis and discussion can answer are:
-\begin{itemize}
-    \item What are the strengths of the model?
-    \item What are the limitations of the model?
-    \item What is the reason that a specific modeling decision improves metric X?
-    \item Alternative methods to the modeling decision and why they are better/worse
-\end{itemize}
+The pretrained network approaches the maximum mAP much faster than the training the model from scratch \ref{fig:loss-2-3}. This results in less computing time and less resource demand. This could already be a decisive decision, since GPU resources are often the dominant factor in developing an object detection model.
 
-We’ve included a set of scripts to help you to visualize predictions for your qualitative analysis. See the project
-readme for more info
+With the pretrained resnet model and the FPN on top, the model increases the mAP especially in detecting medium sized objects. The mAP for medium sized objects is increasing by a significant 2\%. This is visible looking at the inference results in \ref{fig:comparison1}. Medium sized objects like the person on the left or the rider on the hill are not recognized by the baseline model, the model with FPN on the other side detects more smaller sized objects. This is crucial for a model in this domain, since the ability to detect smaller object increases the safety of the car.
 
-\textcolor{red}{Design decision: Model mit weniger Parametern maxpool instead of stride}
+\begin{figure}[t!]
+    \centering
+    \subfigure[]{\includegraphics[width=0.5\textwidth]{Task3-2/image_2_baseline.png}}
+    \subfigure[]{\includegraphics[width=0.5\textwidth]{Task3-2/image_2_FPN.png}}
+    \label{fig:comparison1}
+\end{figure}
+
+The model is mainly limited by the small training dataset, since the overfitting kicks in quite early. This behaviour is also due the fact, that there was initially no augmentations applied. But while the baseline model still approaches higher mAPs, the new model does not seem to increase after around 500 iterations.
+
+The model decision improves the ability of detecting smaller objects, since the FPN introduces semantically rich feature maps with a high resolution.
+
+The paper \cite{efficientdet} states several advanced alternatives to the Feature Pyramid networks: PANet, NAS-FPN and the proposed BiFPN. The BiFPN was applied in Task 4, but yielded no better precision. Thus, the FPN might be the better alternative in this case.
+
+\subsubsection*{Deeper classification and regression heads}
+
+Deeper classification and regression heads enable the model to learn a wider range of patterns in the features from the feature extractor, which result in better regression and classification results, which can be observed in \ref{fig:loss-2-3}. The model especially improves in the ability to detect smaller objects, having an almost twice as good mAP on small objects then all the models before. One can see that especially in \ref{fig:comparison2} on the rightmost side. The person far away is not recognized by the previous FPN model, but almost perfectly detected by the model with deeper heads.
+
+\begin{figure}[t!]
+    \centering
+    \subfigure[]{\includegraphics[width=0.5\textwidth]{Task3-2/image_276_fpn.png}}
+    \subfigure[]{\includegraphics[width=0.5\textwidth]{Task3-2/image_276_head.png}}
+    \label{fig:comparison2}
+\end{figure}
+
+The model is able to learn the sparse features in the feature map corresponding to a person far away. This is decisive for a car, since recognizing danger far away can increase the chance of a proper reaction in time.
+
+The model is limited by the amount of additional parameters. The complex model yields a long inference time and a lower FPS. Instead of around 8 frames per second, the model can only process around 3 frames per second. Thus, the model could be too slow to be working in the domain of autonomous cars, since the reaction time to incoming images could be too slow to be considered safe.
+
+Alternatively, the deeper heads could be replaced by smaller heads, which would lead to a much faster inference time. This approach would reduce the complexity of the model and thus the ability of detecting objects with sparse features. In this case, a compromise has to be found between the expressiveness and the speed of the model.
+
+
+\subsubsection*{Data augmentation}
+
+Data augmentation is crucial in a small data set as the original one. Artificially extending the dataset prevent the model from early overfitting and thus lead to a higher mAP. This can be observed in Task 2.3, where we trained the complex model with and without augmentations \ref{fig:data_augment_comparison}. The final model of Task 2.3 starts to overfit at around 1500 iterations, while model with augmentations improves in mAP until 5000 iterations to a final mAP of 0.09 compared to 0.063 in the same model trained without augmentations. 
+
+The reason for the improvement of 2.7\% is mainly the fact that the artificially increased dataset avoids that the model remembers the features in the small number of images instead of learning the represented features.
+
+The method is mostly limited by the fact that the number augmentations, which can be applied to an image is limited. Artificially increasing the dataset is only going well until a certain limit. If the augmented images are too far away from the images they represent, the model could learn wrong features.
+
+Alternatively, the model could be trained on a larger data set, as it happened in Task 2.5. Yet, enlarging the data set is often not possible or expensive.
+
 
 \subsection*{Task 3.3}
 What are the weaknesses of the approach selected in the project if you were to deliver this to a customer?
 
+The small validation set is definitely a weakness when it comes to estimating the performance of the model. In an idle world, the model would be tested on another representative independent data set. This stops the development of the model from fitting the modeling decisions to the small data set, which might not even be representative at all.
 
-\begin{itemize}
-    \item Commonalities: The majority of images contain cars (and persons?)
-    \item limitations: No motorcycle (due to snow), limited area captured, traffic in recorded area is rarely dense (compared to highways in the US, India, ...)
-    \item Missing annotations are bad for performance
-    \item Special value of dataset: Captured in one of the most northern parts of the world in winter conditions - evaluate network performance and autonomous driving under the impact of snow
-    \item modelling decision derived from exploration:
-        \begin{itemize}
-            \item Spatial position matters (sensor is moving around landscape is hilly) - random crop for data augmentation meaningful, no average pooling
-            \item (delete motorcycle class, as they are no motorcycles in the entire dataset?)
-            \item Calibration of $\alpha$ value for focal loss based on label ratios
-        \end{itemize}
-\end{itemize}
+Furthermore, we observed a lot of wrong labels in the training, as well as in the validation data set. This could mean, that the model is either learning wrong objects, or the metrics, e.g. the mAP, are less representative. In the case of autonomous cars, this represents a severe safety issue.
+
+The inference time could be a problem in the domain of autonomous cars. Processing 4 frames per second might be too slow to follow the safety requirements.
+
+Another problem could be the relatively large size of the model in terms of storage. Systems in autonomous cars have limited storage resources and the size of around 3GB could be too large.
+
 
 \section*{Task 4}
 
@@ -546,7 +544,7 @@ What are the weaknesses of the approach selected in the project if you were to d
 
 For the implementation of BiFPN, we used the available implementation of \cite{efficientdet}. The model corresponds to the model developed in Task 2.3 with small adaptions. For example, the last two feature extractors are replaced by only one convolutional layer each (kernel size 3, stride 2, padding 1). Furthermore we adapted the existing implementation of the BiFPN to process 4 layers instead of 3 layers from the feature extractor in order to get 6 feature maps from the backbone. We used the Bi-FPN implementation with 64 channels and 3 blocks.
 
-While the overall mAP increases slightly, the major improvement is visible in the mAP of small objects. With Bi-FPN, the mAP for small objects more than doubles.
+The runtime of the BiFPN model is Total 12.31s with a FPS value of 8.12. The best best mAP@0.5:0.95 is at 0.072 after 3750 iterations (75 epochs). The number of parameters is 22511987.
 
 
 
